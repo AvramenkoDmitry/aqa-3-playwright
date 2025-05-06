@@ -2,6 +2,9 @@
 import { Page } from "@playwright/test";
 
 export class ShoppingCartPage {
+  completeCheckout() {
+    throw new Error("Method not implemented.");
+  }
   private page: Page;
   private cartBadge = "#badge-number";
   private checkoutButton = "#shopping-cart-btn";
@@ -13,6 +16,7 @@ export class ShoppingCartPage {
   private checkoutSubmitButton = "#continue-to-checkout-button";
   private orderTotal = ".text-muted";
   private addToCartButtons = 'button[name="add-to-card"]';
+  private appliedPromoSelector = "span.my-0";
 
   constructor(page: Page) {
     this.page = page;
@@ -24,15 +28,14 @@ export class ShoppingCartPage {
     );
   }
 
-  async addProductsToCart() {
-    const buttons = await this.page.locator(this.addToCartButtons);
-    const indicesToClick = [1, 3, 5, 7, 9]; // Индексы товаров
+  async addProductsToCart(indicesToClick: number[] = [1, 3, 5, 7, 9]) {
+    const buttons = this.page.locator(this.addToCartButtons);
 
     for (const index of indicesToClick) {
       const button = buttons.nth(index);
       await button.waitFor({ state: "visible" });
       await button.click();
-      await this.page.waitForTimeout(300); // Небольшая пауза
+      await this.page.waitForTimeout(300);
     }
   }
 
@@ -60,7 +63,7 @@ export class ShoppingCartPage {
     await this.page.fill(this.promoCodeInput, promoCode);
     await this.page.click(this.applyPromoButton);
     await this.page
-      .locator(`span.my-0`, { hasText: promoCode })
+      .locator(this.appliedPromoSelector, { hasText: promoCode })
       .waitFor({ timeout: 2000 });
   }
 
@@ -75,7 +78,7 @@ export class ShoppingCartPage {
     return match ? match[0] : "$0";
   }
 
-  async completeCheckout() {
+  async clickCheckoutButton() {
     await this.page.click(this.checkoutSubmitButton);
   }
 

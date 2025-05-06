@@ -45,7 +45,7 @@ test("Shopping Cart Test with single promo code", async ({ page }) => {
   expect(finalTotalValue).toBeCloseTo(expectedFinalTotal, 2);
 
   // Шаг 7: Завершение оформления
-  await shoppingCartPage.completeCheckout();
+  await shoppingCartPage.clickCheckoutButton();
 
   // Шаг 8: Проверка суммы в финальном заказе
   const orderTotalText = await shoppingCartPage.getOrderTotal();
