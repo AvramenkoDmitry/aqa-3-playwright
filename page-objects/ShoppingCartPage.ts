@@ -43,7 +43,7 @@ export class ShoppingCartPage {
     return await this.page.locator(this.cartBadge).innerText();
   }
 
-  async goToCheckout() {
+  async clickCheckout() {
     await this.page.click(this.checkoutButton);
   }
 
@@ -88,5 +88,10 @@ async clearAndSetValue(selector: Locator, value: string) {
 
   async getOrderTotal(): Promise<string> {
     return await this.page.locator(this.orderTotal).innerText();
+  }
+  // В файле ShoppingCartPage.ts
+  async getDiscountText() {
+    const discountElement = this.page.locator("small.text-muted.fw-bold");
+    return await discountElement.textContent(); // Вернет текст вроде "-10%"
   }
 }
