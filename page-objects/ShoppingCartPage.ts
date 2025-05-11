@@ -58,9 +58,13 @@ export class ShoppingCartPage {
     return parseFloat(totalPrice.replace("$", "").trim());
   }
 
+async clearAndSetValue(selector: Locator, value: string) {
+   await page.getByRole(selector).clear();
+    await this.page.fill(selector, value);
+}
+
   async applyPromoCode(promoCode: string) {
-    await this.page.fill(this.promoCodeInput, ""); // очищаем
-    await this.page.fill(this.promoCodeInput, promoCode);
+   await clearAndSetValue(this.promoCodeInput, promoCode)
     await this.page.click(this.applyPromoButton);
     await this.page
       .locator(this.appliedPromoSelector, { hasText: promoCode })
