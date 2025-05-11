@@ -11,8 +11,14 @@ test("Login and navigate", async ({ page }) => {
   // Нажать на кнопку для входа
   await page.locator('button[type="submit"]').click();
 
-  // Дождаться исчезновения спиннера
-  await page.locator("div.spinner").waitFor({ state: "hidden" });
+ // Дождаться, пока все спиннеры исчезнут
+const spinners = page.locator("div.spinner");
+const count = await spinners.count();
+
+for (let i = 0; i < count; i++) {
+  await spinners.nth(i).waitFor({ state: "hidden" });
+}
+
 
   // Проверить, что пользователь вошел с логином "Anatoly"
   const userName = await page.locator("a#dropdownUser1 strong").textContent();
